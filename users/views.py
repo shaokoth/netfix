@@ -38,6 +38,7 @@ class CompanySignUpView(CreateView):
         user = form.save()
         login(self.request, user)
         return redirect('/')
+    
 
 
 def LoginUserView(request):
@@ -59,5 +60,5 @@ def LoginUserView(request):
                 form.add_error(None, "No user found with this email.")
     else:
         form = UserLoginForm()
-    return render(request, 'users/login.html')
+    return render(request, 'users/login.html', {"form": form})
 
