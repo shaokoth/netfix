@@ -26,7 +26,22 @@ class CustomerSignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('email', 'password1', 'password2', 'birth')
-        
+        widgets = {
+            'email': forms.EmailInput(attrs={'placeholder': 'Enter Email'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Customize password fields
+        self.fields['password1'].widget.attrs.update({
+            'placeholder': 'Enter Password',
+            'class': 'form-control',
+        })
+        self.fields['password2'].widget.attrs.update({
+            'placeholder': 'Confirm Password',
+            'class': 'form-control',
+        })
+          
     @transaction.atomic
     def save(self):
         user = super().save(commit=False)
@@ -45,6 +60,33 @@ class CompanySignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'placeholder': 'Enter Username',
+                'class': 'form-control'
+            }),
+            'email': forms.EmailInput(attrs={
+                'placeholder': 'Enter Email',
+                'class': 'form-control'
+            }),
+        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Add attributes to password1 and password2 manually
+        self.fields['password1'].widget.attrs.update({
+            'placeholder': 'Enter Password',
+            'class': 'form-control'
+        })
+        self.fields['password2'].widget.attrs.update({
+            'placeholder': 'Confirm Password',
+            'class': 'form-control'
+        })
+
+        # Optional: style the custom 'field' dropdown
+        self.fields['field'].widget.attrs.update({
+            'class': 'form-select'  # Bootstrap 5 compatible
+        })
     
     @transaction.atomic
     def save(self):
