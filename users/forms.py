@@ -25,8 +25,12 @@ class CustomerSignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('email', 'password1', 'password2', 'birth')
+        fields = ('username','email', 'password1', 'password2', 'birth')
         widgets = {
+             'username': forms.TextInput(attrs={
+                'placeholder': 'Enter Username',
+                'class': 'form-control'
+            }),
             'email': forms.EmailInput(attrs={'placeholder': 'Enter Email'}),
         }
 
