@@ -21,8 +21,8 @@
         <li><a href="/company/{{ request.user.username }}">Profile</a></li>
         <li class="last_navbar"><a href="/logout">Logout</a></li>
         {% else %}
-        <li><a href="users/login">Login</a></li>
-        <li><a href="users/register/">SignUp</a></li>
+        <li><a href="/users/login">Login</a></li>
+        <li><a href="/users/register/">SignUp</a></li>
         {% endif %}
     </ul>
 </nav>
