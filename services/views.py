@@ -18,7 +18,34 @@ def index(request, id):
 
 
 def create(request):
-    return render(request, 'services/create.html', {})
+    choices = [(field, field) for field, _ in Service._meta.get_field('field').choices]
+
+    if request.method == 'POST':
+        form = CreateNewService(request.POST, choices=choices)
+        if form.is_valid():
+            # Manually create a Service instance
+            name = form.cleaned_data['name']
+            description = form.cleaned_data['description']
+            price_hour = form.cleaned_data['price_hour']
+            field = form.cleaned_data['field']
+
+            service = Service(
+                name=name,
+                description=description,
+                price_hour=price_hour,
+                field=field,
+                company=request.user.company  # Assumes the user is a company
+            )
+            service.save()
+
+            # Redirect to the service detail view
+            return redirect('index', id=service.id)
+    else:
+        form = CreateNewService(choices=choices)
+
+    return render(request, 'services/create.html', {'form': form})
+
+
 
 
 def service_field(request, field):
