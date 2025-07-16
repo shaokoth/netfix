@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 
 from users.models import Company, Customer, User
 
-from .models import Service
+from .models import Service, ServiceHistory
 from .forms import CreateNewService, RequestServiceForm
 
 
@@ -64,7 +64,7 @@ def request_service(request, id):
         if form.is_valid():
             # Create a new service request (example assumes you have a ServiceHistory model)
             ServiceHistory.objects.create(
-                user=request.user,
+                user=request.user.customer,# Assuming the user is a customer
                 service=service,
                 address=form.cleaned_data['address'],
                 service_hours=form.cleaned_data['service_hours'],
