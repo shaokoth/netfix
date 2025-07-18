@@ -11,7 +11,6 @@ from .models import User, Company, Customer
 def register(request):
     return render(request, 'users/register.html')
 
-@csrf_protect
 class CustomerSignUpView(CreateView):
     model = User
     form_class = CustomerSignUpForm
@@ -26,7 +25,7 @@ class CustomerSignUpView(CreateView):
         login(self.request, user)
         return redirect('/')
 
-@csrf_protect
+
 class CompanySignUpView(CreateView):
     model = User
     form_class = CompanySignUpForm
