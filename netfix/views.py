@@ -40,7 +40,8 @@ def customer_profile(request):
 
 def company_profile(request, name):
     # fetches the company user and all of the services available by it
-    user = User.objects.get(username=name)
+    user = get_object_or_404(User, username=name)
+    company = get_object_or_404(Company, user=user)
     services = Service.objects.filter(
         company=Company.objects.get(user=user)).order_by("-date")
 

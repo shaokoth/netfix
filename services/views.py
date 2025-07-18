@@ -5,6 +5,7 @@ from users.models import Company, Customer, User
 
 from .models import Service, ServiceHistory
 from .forms import CreateNewService, RequestServiceForm
+from decimal import Decimal
 
 
 def service_list(request):
@@ -68,7 +69,7 @@ def request_service(request, id):
                 service=service,
                 address=form.cleaned_data['address'],
                 service_hours=form.cleaned_data['service_hours'],
-                price=service.price_hour * float(form.cleaned_data['service_hours'])
+                price=service.price_hour * Decimal(str(form.cleaned_data['service_hours']))
             )
             return redirect('user-profile')
     else:
