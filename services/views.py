@@ -65,13 +65,13 @@ def request_service(request, id):
         if form.is_valid():
             # Create a new service request (example assumes you have a ServiceHistory model)
             ServiceHistory.objects.create(
-                user=request.user.customer,# Assuming the user is a customer
+                customer=request.user.customer,# Assuming the user is a customer
                 service=service,
                 address=form.cleaned_data['address'],
                 service_hours=form.cleaned_data['service_hours'],
                 price=service.price_hour * Decimal(str(form.cleaned_data['service_hours']))
             )
-            return redirect('user-profile')
+            return redirect('customer_profile')
     else:
         form = RequestServiceForm()
 
