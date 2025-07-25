@@ -71,7 +71,7 @@ def request_service(request, id):
                 service_hours=form.cleaned_data['service_hours'],
                 price=service.price_hour * Decimal(str(form.cleaned_data['service_hours']))
             )
-            return redirect('customer_profile')
+            return redirect('customer_profile', username=request.user.username)
     else:
         form = RequestServiceForm()
 
