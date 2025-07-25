@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from users.models import User, Company
 from services.models import Service, Customer,ServiceHistory
@@ -17,7 +17,7 @@ def customer_profile(request, name):
     user = get_object_or_404(User, username=name, is_customer=True)
     customer = get_object_or_404(Customer, user=user)
     user_age = calculate_age(customer.birth) if customer.birth else 'N/A'
-    sh = ServiceHistory.objects.filter(customer=customer).order_by("-date")
+    sh = ServiceHistory.objects.filter(customer=customer).order_by("-request_date")
 
     return render(request, 'users/profile.html', {
         'user': user,
@@ -29,6 +29,8 @@ def customer_profile(request, name):
 def company_profile(request, name):
     # fetches the company user and all of the services available by it
     user = get_object_or_404(User, username=name)
+    if not user.is_company:
+        return redirect('customer_profile', name=user.username)
     services = Service.objects.filter(
         company=Company.objects.get(user=user)).order_by("-date")
 
