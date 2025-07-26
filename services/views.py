@@ -19,8 +19,12 @@ def index(request, id):
 
 
 def create(request):
-    choices = [(field, field) for field, _ in Service._meta.get_field('field').choices]
-
+    company = request.user.company  # Get the current user's company
+    if company.field == 'All in One':
+        choices = [(field, field) for field, _ in Service._meta.get_field('field').choices]
+    else:
+        choices = [(company.field, company.field)]# Only the company's own field
+        
     if request.method == 'POST':
         form = CreateNewService(request.POST, choices=choices)
         if form.is_valid():
@@ -29,8 +33,11 @@ def create(request):
             description = form.cleaned_data['description']
             price_hour = form.cleaned_data['price_hour']
             field = form.cleaned_data['field']
-
-            service = Service(
+            
+            if company.field != 'All in One' and field != company.field:
+                form.add_error('field', 'You can only create services related to your own field.')
+            else:
+                service = Service(
                 name=name,
                 description=description,
                 price_hour=price_hour,
