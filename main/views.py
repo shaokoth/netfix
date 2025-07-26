@@ -6,8 +6,8 @@ from django.db.models import Count
 
 def home(request):
     most_requested_services = Service.objects.annotate(
-        request_count=Count('servicehistory')  # or 'histories' if you added related_name
-    ).order_by('-request_count')[:3]
+        request_count=Count('servicehistory')
+    ).filter(request_count__gt=0).order_by('-request_count')[:3]
 
     context = {
         'most_requested_services': most_requested_services,
