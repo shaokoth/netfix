@@ -26,16 +26,18 @@ A Django-based web application for connecting customers with service providers.
 
 4. Run migrations:
    ```bash
-   python manage.py makemigrations
-   python manage.py migrate
+   python3 manage.py makemigrations
+   python3 manage.py migrate
    ```
 
 5. Create a superuser:
    ```bash
-   python manage.py createsuperuser
+   python3 manage.py createsuperuser
    ```
 
 6. Run the development server:
    ```bash
-   python manage.py runserver
+   python3 manage.py 
+   ```
+
 Activate the virtual environment
