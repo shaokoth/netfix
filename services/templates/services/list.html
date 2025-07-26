@@ -10,12 +10,17 @@
     <div class='services_list'>
         {% if services %}
             {% for service in services.all %}
-            <div style="display: flex; justify-content: space-between;">
-                    <h3>{{ service.name }}</h3>
-                    <p>{{ service.description }}</p>
-                    <p>Price per Hour: {{ service.price_hour }}</p>
-                    <p>Field: {{ service.field }}</p>
-                </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 10px; border-bottom: 1px solid #363434;">
+                <a href="/services/{{ service.id }}" style="text-decoration: none; color: #e02a21;">
+                    <h3 style="margin: 0;">{{ service.name }}</h3>
+                </a>
+                <p style="margin: 0;">({{ service.field }})</p>
+                <p style="margin: 0;">Price per Hour: {{ service.price_hour }}</p>
+                <p style="margin: 0; font-style: italic;">
+                    by <a href="{% url 'company_profile' service.company.user.username %}" style="text-decoration: none; color: #e02a21;">{{ service.company.user.username }}</a>
+
+                </p>
+            </div>
             {% endfor %}
         {% else %}
             <h2>Sorry No services available yet</h2>
