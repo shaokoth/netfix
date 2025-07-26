@@ -34,7 +34,7 @@ class Service(models.Model):
         return self.name
 
 class ServiceHistory(models.Model):
-    user = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     address = models.CharField(max_length=255)
     service_hours = models.DecimalField(max_digits=5, decimal_places=2)
@@ -42,4 +42,4 @@ class ServiceHistory(models.Model):
     request_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.user.username} - {self.service.name} - {self.request_date.date()}"
+        return f"{self.customer.user.username} - {self.service.name} - {self.request_date.date()}"

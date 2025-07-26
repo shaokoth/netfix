@@ -10,6 +10,12 @@
     <div class='services_list'>
         {% if services %}
             {% for service in services.all %}
+            <div style="display: flex; justify-content: space-between;">
+                    <h3>{{ service.name }}</h3>
+                    <p>{{ service.description }}</p>
+                    <p>Price per Hour: {{ service.price_hour }}</p>
+                    <p>Field: {{ service.field }}</p>
+                </div>
             {% endfor %}
         {% else %}
             <h2>Sorry No services available yet</h2>

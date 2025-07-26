@@ -2,6 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.views.generic import CreateView, TemplateView
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from services.models import ServiceHistory, Service
+from django.shortcuts import render, redirect,get_object_or_404
+
 
 
 from .forms import CustomerSignUpForm, CompanySignUpForm, UserLoginForm
@@ -63,3 +68,24 @@ def LoginUserView(request):
         form = UserLoginForm()
     return render(request, 'users/login.html', {"form": form})
 
+@login_required
+def CustomerProfileView(request, username):
+    customer = Customer.objects.get(user=request.user)
+    user_age = timezone.now().year - customer.birth.year
+    requested_services = ServiceHistory.objects.filter(customer=customer).order_by('-request_date')
+    return render(request, 'users/profile.html', {
+        'user': request.user,
+        'user_age': user_age,
+        'sh': requested_services  # Placeholder for requested services history
+    })
+
+@login_required
+def CompanyProfileView(request, username):
+    company = get_object_or_404(Company, user__username=username)
+    services = Service.objects.filter(company=company).order_by("-date")
+
+    return render(request, 'users/profile.html', {
+        'user': request.user,
+        'company': company,
+        'services': services,  # Pass the company's services to the template
+    })

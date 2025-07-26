@@ -1,46 +1,36 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from users.models import User, Company
-from services.models import Service, ServiceHistory, Customer
-from django.shortcuts import get_object_or_404, redirect
-from datetime import datetime, date
+from services.models import Service, Customer,ServiceHistory
+from django.shortcuts import get_object_or_404
+from datetime import date
 
 
 def home(request):
     return render(request, 'users/home.html', {'user': request.user})
 
-def calculate_age(birthdate):
+def calculate_age(birth_date):
     today = date.today()
-    return today.year - birthdate.year - (
-        (today.month, today.day) < (birthdate.month, birthdate.day)
-    )
+    return today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
 
-def customer_profile(request):
-    # fetches the customer user and all of the services requested by it
-    # user = request.user
-    # services = user.customer.servicehistory_set.all().order_by("-request_date")
-
-    # return render(request, 'users/profile.html', {'user': user, 'services': services})
-    # Ensure user is authenticated
-    if not request.user.is_authenticated:
-        return redirect('login')  # or a 403/404 page if preferred
-
-    # Get the Customer instance
-    customer = get_object_or_404(Customer, user=request.user)
-
-    # Get the service history for this customer
-    sh = ServiceHistory.objects.filter(user=customer).order_by('-request_date')
-    user_age = calculate_age(customer.birthdate) if customer.birthdate else "N/A"
+def customer_profile(request, name):
+    user = get_object_or_404(User, username=name, is_customer=True)
+    customer = get_object_or_404(Customer, user=user)
+    user_age = calculate_age(customer.birth) if customer.birth else 'N/A'
+    sh = ServiceHistory.objects.filter(customer=customer).order_by("-request_date")
 
     return render(request, 'users/profile.html', {
-        'user': request.user,
-        'sh': sh,
+        'user': user,
         'user_age': user_age,
+        'sh': sh,
     })
-
+    
+    
 def company_profile(request, name):
     # fetches the company user and all of the services available by it
-    user = User.objects.get(username=name)
+    user = get_object_or_404(User, username=name)
+    if not user.is_company:
+        return redirect('customer_profile', name=user.username)
     services = Service.objects.filter(
         company=Company.objects.get(user=user)).order_by("-date")
 
