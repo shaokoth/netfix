@@ -17,7 +17,7 @@
         {% for service in most_requested_services %}
         <div class="service-item">
             <a href="/services/{{service.id}}">{{service.name}}</a> ({{service.field}})
-            <p style="margin: 0; display: inline-block;"> ❱❱ {{service.total_price|floatformat:2 }}</p>
+            <p style="margin: 0; display: inline-block;"> ❱❱ {{service.price_hour|floatformat:2 }}/hour</p>
             <p style="margin: 0; display: inline-block;"> {{ service.request_date }}</p>
             <p style="float: right; margin: 0;">
                 by <a href="">{{service.company.user}}</a>
